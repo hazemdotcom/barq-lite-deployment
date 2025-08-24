@@ -1,5 +1,5 @@
 
-**BARQ Lite – Two-Server Ops Project**
+# BARQ Lite – Two-Server Ops Project
 
 ## Overview / Description
 
