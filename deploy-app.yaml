@@ -1,0 +1,14 @@
+- name: Deploy BARQ Lite Java Application
+  hosts: barq
+  become: yes
+  serial: 1
+  vars:
+    releases_dir: /opt/barq/releases
+    current_symlink: /opt/barq/current
+    jar_file: barq-lite.jar
+    log_dir: /var/log/barq
+
+  roles:
+    - barq_logs
+    - barq_app
+    - barq_service

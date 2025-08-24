@@ -1,0 +1,14 @@
+---
+- name: Create mysql database
+  mysql_db:
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+    name: "{{ db_name }}"
+    state: present
+
+- name: Create database user
+  mysql_user:
+    name: "{{ db_user }}"
+    password: "12345"
+    priv: '*.*:ALL'
+    state: present
+    login_unix_socket: /var/run/mysqld/mysqld.sock

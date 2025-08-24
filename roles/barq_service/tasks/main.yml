@@ -1,0 +1,29 @@
+- name: Create systemd service for BARQ
+  copy:
+    dest: /etc/systemd/system/barq.service
+    content: |
+      [Unit]
+      Description=BARQ Lite Java App
+      After=network.target
+
+      [Service]
+      ExecStart=/usr/bin/java -jar {{ current_symlink }}/{{ jar_file }}
+      WorkingDirectory={{ current_symlink }}
+      StandardOutput=append:{{ log_dir }}/barq.log
+      StandardError=append:{{ log_dir }}/barq.log
+      Restart=always
+      User=root
+
+      [Install]
+      WantedBy=multi-user.target
+  notify: Reload systemd
+
+- name: Ensure BARQ service is enabled and running
+  systemd:
+    name: barq
+    enabled: yes
+    state: restarted
+
+# Handler is role-specific
+- name: Reload systemd
+  command: systemctl daemon-reload

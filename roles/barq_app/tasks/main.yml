@@ -1,0 +1,33 @@
+- name: Generate release ID
+  command: date +%Y%m%d%H%M%S
+  register: release_id_cmd
+  changed_when: false
+
+- name: Set release_id fact
+  set_fact:
+    release_id: "{{ release_id_cmd.stdout }}"
+
+- name: Ensure base releases directory exists
+  file:
+    path: "{{ releases_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Ensure release directory exists
+  file:
+    path: "{{ releases_dir }}/{{ release_id }}"
+    state: directory
+    mode: '0755'
+
+- name: Copy JAR to release directory
+  copy:
+    src: "{{ jar_file }}"
+    dest: "{{ releases_dir }}/{{ release_id }}/{{ jar_file }}"
+    mode: '0644'
+
+- name: Update symlink to latest release
+  file:
+    src: "{{ releases_dir }}/{{ release_id }}"
+    dest: "{{ current_symlink }}"
+    state: link
+    force: yes
